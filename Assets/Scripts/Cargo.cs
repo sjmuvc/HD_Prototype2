@@ -113,6 +113,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         Cacher.cargoManager.AllFreeze(true);
         Cacher.inputManager.InPutRotate(Objectpivot);
         RayPositioning(worldMousePos);
+        Debug.Log(currentStackHeight);
     }
 
     void RayPositioning(Vector3 worldMousePos)
@@ -231,7 +232,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
     {
         RaycastHit[] sweepTestHitAll;
 
-        sweepTestHitAll = rigidBody.SweepTestAll(-Objectpivot.transform.up, Cacher.uldManager.currentULD.virtualPlaneHeight + 5, QueryTriggerInteraction.Ignore);
+        sweepTestHitAll = rigidBody.SweepTestAll(new Vector3(0, -1, 0), Cacher.uldManager.currentULD.virtualPlaneHeight * 2, QueryTriggerInteraction.Ignore);
         if (sweepTestHitAll.Length == 0)
         {
             return;
