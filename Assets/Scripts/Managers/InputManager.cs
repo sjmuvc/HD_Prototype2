@@ -39,7 +39,6 @@ public class InputManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            objectPivot.transform.GetChild(0).GetComponent<Cargo>().objectHeight = objectPivot.transform.GetChild(0).GetComponent<Cargo>().objectHeightY;
             objectPivot.transform.Rotate(0, rotateValue, 0, Space.World);
             ResetSimulation(objectPivot);
         }
