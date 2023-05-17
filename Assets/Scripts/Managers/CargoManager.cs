@@ -80,8 +80,6 @@ public class CargoManager : MonoBehaviour
             CargoZonePositioning(generatedCargo.gameObject);
             generatedCargo.startPosition = generatedCargo.Objectpivot.transform.localPosition;
             generatedCargo.startLocalEulerAngles = generatedCargo.Objectpivot.transform.localEulerAngles;
-            Debug.Log("remainCargoIndex : " + remainCargoIndex);
-            
         }
     }
 
