@@ -10,6 +10,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
     RaycastHit hitLayerMask;
     public Vector3 thisPos;
     GameObject virtualObject;
+    GameObject abovePlaneObject;
     public float objectHeight;
     public float objectHeightX;
     public float objectHeightY;
@@ -80,6 +81,17 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         virtualObject.transform.GetChild(0).gameObject.GetComponent<VirtualObjectTrigger>().cargoManager = this.GetComponent<Cargo>();
         virtualObject.SetActive(false);
 
+        abovePlaneObject = Instantiate(Objectpivot, Objectpivot.transform);
+        Destroy(abovePlaneObject.transform.GetChild(0).GetComponentInChildren<Cargo>());
+        Destroy(abovePlaneObject.transform.GetChild(0).GetComponentInChildren<CargoInfo>());
+        Destroy(abovePlaneObject.transform.GetChild(0).GetComponentInChildren<LineRenderer>());
+
+        abovePlaneObject.transform.GetChild(0).gameObject.GetComponent<MeshCollider>().convex = true;
+        abovePlaneObject.transform.GetChild(0).gameObject.GetComponent<Rigidbody>().useGravity = true;
+        abovePlaneObject.transform.GetChild(0).gameObject.GetComponent<Rigidbody>().isKinematic = true;
+        abovePlaneObject.transform.GetChild(0).gameObject.tag = "Untagged";
+        Destroy(abovePlaneObject.transform.GetChild(1).gameObject);
+
         SettingObjectTransform();
         Objectpivot.transform.parent = Cacher.cargoManager.cargoZone.transform.Find("Objects").gameObject.transform;
     }
@@ -134,12 +146,14 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         {
             isOnVirtualPlane = true;
 
-            #region VirtualPlane위의 높이 잡아주기
-            Objectpivot.transform.position = new Vector3(hitLayerMask.point.x, Cacher.uldManager.currentULD.virtualPlaneHeight * 2, hitLayerMask.point.z); // 객체의 위치를 RaycastHit의 point값 위치로 이동
-            
+            #region VirtualPlane위의 높이 잡아주기 
+            //Objectpivot.transform.position = new Vector3(hitLayerMask.point.x, Cacher.uldManager.currentULD.virtualPlaneHeight * 2, hitLayerMask.point.z); // 객체의 위치를 RaycastHit의 point값 위치로 이동
+
+            abovePlaneObject.transform.position = new Vector3(hitLayerMask.point.x, Cacher.uldManager.currentULD.virtualPlaneHeight * 2, hitLayerMask.point.z);
+
             RaycastHit[] sweepTestHitAll;
 
-            sweepTestHitAll = rigidBody.SweepTestAll(new Vector3(0, -1, 0), Cacher.uldManager.currentULD.virtualPlaneHeight * 2, QueryTriggerInteraction.Ignore);
+            sweepTestHitAll = abovePlaneObject.transform.GetChild(0).GetComponent<Rigidbody>().SweepTestAll(new Vector3(0, -1, 0), Cacher.uldManager.currentULD.virtualPlaneHeight * 2, QueryTriggerInteraction.Ignore);
             if (sweepTestHitAll.Length == 0)
             {
                 return;
@@ -151,14 +165,13 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
             {
                 if (sweepTestHit.collider.tag == "VirtualPlane")
                 {
-                    /*
+                    
                     if (sweepTestHitSelected.distance > sweepTestHit.distance || sweepTestHitSelected.collider.tag != "VirtualPlane")
                     {
                         sweepTestHitSelected = sweepTestHit;
                     }
-                    */
-                    float height = Objectpivot.transform.position.y - (sweepTestHit.distance);
-                    //currentStackHeight = rayHeight;
+                    
+                    float height = abovePlaneObject.transform.position.y - (sweepTestHitSelected.distance);
                     Objectpivot.transform.position = new Vector3(hitLayerMask.point.x, height, hitLayerMask.point.z);
                 }
             }
