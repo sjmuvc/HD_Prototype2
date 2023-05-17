@@ -25,7 +25,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
     public Vector3 startPosition;
     public Vector3 startLocalEulerAngles;
 
-    float cameraToObjectDistance = 10;
+    float cameraToObjectDistance = 20;
     float mouseRayDistance = 1000;
     bool isOnVirtualPlane = false;
     float currentStackHeight;
