@@ -110,12 +110,9 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
     {
         Vector3 mousePos = Input.mousePosition;
         Vector3 worldMousePos = Cacher.uiManager.mainCamera.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, cameraToObjectDistance)); // ī�޶�κ��� �Ÿ���
-        Objectpivot.transform.position = worldMousePos;
         Cacher.cargoManager.AllFreeze(true);
         Cacher.inputManager.InPutRotate(Objectpivot);
         RayPositioning(worldMousePos);
-
-
     }
 
     void RayPositioning(Vector3 worldMousePos)
@@ -134,6 +131,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         }
         else
         {
+            Objectpivot.transform.position = worldMousePos;
             isOnVirtualPlane = false;
             DrawVirtualObject(isOnVirtualPlane);
             Cacher.uldManager.currentULD.virtualPlaneMeshRenderer.enabled = true;
