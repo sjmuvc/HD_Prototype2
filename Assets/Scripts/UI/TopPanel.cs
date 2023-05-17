@@ -20,6 +20,7 @@ public class TopPanel : MonoBehaviour
         Cacher.uiManager.GetComponent<BottomPanel>().OnClickButton_SCA();
         Cacher.uiManager.GetComponent<BottomPanel>().inputField_Quantity.text = zero.ToString();
         Cacher.uiManager.GetComponent<BottomPanel>().OnClickButton_SpawnCargo();
+        Cacher.uiManager.GetComponent<BottomPanel>().inputField_Quantity.text = null;
     }
 
     void OnClickButton_Home()
@@ -27,5 +28,6 @@ public class TopPanel : MonoBehaviour
         Cacher.uiManager.GetComponent<BottomPanel>().OnClickButton_SCA();
         Cacher.uiManager.GetComponent<BottomPanel>().inputField_Quantity.text = zero.ToString();
         Cacher.uiManager.GetComponent<BottomPanel>().OnClickButton_SpawnCargo();
+        Cacher.uiManager.GetComponent<BottomPanel>().inputField_Quantity.text = null;
     }
 }
