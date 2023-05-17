@@ -133,7 +133,38 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         if (Physics.Raycast(ray, out hitLayerMask, Mathf.Infinity, layerMask)) // layerMask에 닿은 RaycastHit 반환
         {
             isOnVirtualPlane = true;
-            Objectpivot.transform.position = new Vector3(hitLayerMask.point.x, Cacher.uldManager.currentULD.virtualPlaneHeight + (objectHeight / 2) - 0.00001f, hitLayerMask.point.z); // 객체의 위치를 RaycastHit의 point값 위치로 이동
+
+            #region VirtualPlane위의 높이 잡아주기
+            Objectpivot.transform.position = new Vector3(hitLayerMask.point.x, Cacher.uldManager.currentULD.virtualPlaneHeight * 2, hitLayerMask.point.z); // 객체의 위치를 RaycastHit의 point값 위치로 이동
+            
+            RaycastHit[] sweepTestHitAll;
+
+            sweepTestHitAll = rigidBody.SweepTestAll(new Vector3(0, -1, 0), Cacher.uldManager.currentULD.virtualPlaneHeight * 2, QueryTriggerInteraction.Ignore);
+            if (sweepTestHitAll.Length == 0)
+            {
+                return;
+            }
+
+            RaycastHit sweepTestHitSelected = sweepTestHitAll[0];
+
+            foreach (RaycastHit sweepTestHit in sweepTestHitAll)
+            {
+                if (sweepTestHit.collider.tag == "VirtualPlane")
+                {
+                    /*
+                    if (sweepTestHitSelected.distance > sweepTestHit.distance || sweepTestHitSelected.collider.tag != "VirtualPlane")
+                    {
+                        sweepTestHitSelected = sweepTestHit;
+                    }
+                    */
+                    float height = Objectpivot.transform.position.y - (sweepTestHit.distance);
+                    //currentStackHeight = rayHeight;
+                    Objectpivot.transform.position = new Vector3(hitLayerMask.point.x, height, hitLayerMask.point.z);
+                }
+            }
+            
+            #endregion
+
             DetectStackHeight();
             DrawVirtualObject(isOnVirtualPlane);
             Cacher.uldManager.currentULD.virtualPlaneMeshRenderer.enabled = false;
