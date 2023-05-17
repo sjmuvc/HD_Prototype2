@@ -45,6 +45,10 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         this.gameObject.tag = "StackObject";
+        for (int i = 0; i < this.transform.childCount; i++) 
+        {
+            this.gameObject.transform.GetChild(i).tag = "StackObject";
+        }
         layerName = LayerMask.NameToLayer("Cargo");
         this.gameObject.layer = layerName;
 
@@ -68,6 +72,10 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         virtualObject.transform.GetChild(0).gameObject.GetComponent<Rigidbody>().isKinematic = true;
         virtualObjectOriginMat = gameManager.greenMaterial;
         virtualObject.transform.GetChild(0).gameObject.tag = "Untagged";
+        for (int i = 0; i < virtualObject.transform.GetChild(0).transform.childCount; i++)
+        {
+            virtualObject.transform.GetChild(0).transform.GetChild(i).tag = "Untagged";
+        }
         virtualObject.transform.GetChild(0).gameObject.AddComponent<VirtualObjectTrigger>();
         virtualObject.transform.GetChild(0).gameObject.GetComponent<VirtualObjectTrigger>().cargoManager = this.GetComponent<Cargo>();
         virtualObject.SetActive(false);
