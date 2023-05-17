@@ -89,6 +89,11 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         abovePlaneObject.transform.GetChild(0).gameObject.GetComponent<MeshCollider>().convex = true;
         abovePlaneObject.transform.GetChild(0).gameObject.GetComponent<Rigidbody>().useGravity = true;
         abovePlaneObject.transform.GetChild(0).gameObject.GetComponent<Rigidbody>().isKinematic = true;
+        abovePlaneObject.transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().enabled = false;
+        for (int i = 0; i < abovePlaneObject.transform.GetChild(0).transform.childCount; i++) 
+        {
+            abovePlaneObject.transform.GetChild(0).transform.GetChild(i).gameObject.GetComponent<MeshRenderer>().enabled = false;
+        }
         abovePlaneObject.transform.GetChild(0).gameObject.tag = "Untagged";
         Destroy(abovePlaneObject.transform.GetChild(1).gameObject);
 
