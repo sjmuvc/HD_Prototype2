@@ -42,6 +42,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
     bool isEnableStack;
     int layerName;
     public bool isPreviousCargo = false;
+    float virtualPlaneSetHeight;
 
     public void GenerateSetting()
     {
@@ -160,33 +161,28 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
             RaycastHit[] sweepTestHitAll;
 
             sweepTestHitAll = abovePlaneObject.transform.GetChild(0).GetComponent<Rigidbody>().SweepTestAll(new Vector3(0, -1, 0), Cacher.uldManager.currentULD.virtualPlaneHeight * 2, QueryTriggerInteraction.Ignore);
+            /*
             if (sweepTestHitAll.Length == 0)
             {
                 return;
             }
-
-            //RaycastHit sweepTestHitSelected = sweepTestHitAll[0];
-
+            */
+            
             foreach (RaycastHit sweepTestHit in sweepTestHitAll)
             {
                 if (sweepTestHit.collider.tag == "VirtualPlane")
                 {
-                    /*
-                    if (sweepTestHitSelected.distance > sweepTestHit.distance || sweepTestHitSelected.collider.tag != "VirtualPlane")
-                    {
-                        sweepTestHitSelected = sweepTestHit;
-                    }
-                    */
-                    float height = abovePlaneObject.transform.position.y - (sweepTestHit.distance);
-                    Objectpivot.transform.position = new Vector3(hitLayerMask.point.x, height, hitLayerMask.point.z);
+                    virtualPlaneSetHeight = abovePlaneObject.transform.position.y - (sweepTestHit.distance);
                 }
+                Debug.Log(sweepTestHit.collider.name);
             }
-            
             #endregion
 
+            //Objectpivot.transform.position = new Vector3(hitLayerMask.point.x, Cacher.uldManager.currentULD.virtualPlaneHeight, hitLayerMask.point.z);
             DetectStackHeight();
             DrawVirtualObject(isOnVirtualPlane);
             Cacher.uldManager.currentULD.virtualPlaneMeshRenderer.enabled = false;
+            Objectpivot.transform.position = new Vector3(hitLayerMask.point.x, virtualPlaneSetHeight, hitLayerMask.point.z);
         }
         else
         {

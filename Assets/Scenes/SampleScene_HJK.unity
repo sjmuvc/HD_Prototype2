@@ -8038,6 +8038,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wood_Crate (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 7714876798109462850, guid: aa988a758ee394140b200cfa8bfbbbb5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8561076723074372510, guid: aa988a758ee394140b200cfa8bfbbbb5,
         type: 3}
       propertyPath: m_RootOrder
@@ -13426,7 +13431,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 20, y: 0, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
@@ -20029,6 +20034,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Drum_Pallet
+      objectReference: {fileID: 0}
+    - target: {fileID: 6430964049394574914, guid: 060dbdcea3cb7bb4f81abd5167a99960,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5295533022460880890, guid: 060dbdcea3cb7bb4f81abd5167a99960, type: 3}
@@ -34111,7 +34121,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &833642148
 PrefabInstance:
@@ -37585,6 +37595,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Mesh_Cage
+      objectReference: {fileID: 0}
+    - target: {fileID: 5111322644197097453, guid: 746def18731593a45a240f6a6da1d8dd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2280690869032437309, guid: 746def18731593a45a240f6a6da1d8dd, type: 3}
@@ -57821,6 +57836,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Plastic_Drum
       objectReference: {fileID: 0}
+    - target: {fileID: 4138710215799950393, guid: 7fbd6fbe138dcc74382656f81b18dd2f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4213543323673938792, guid: 7fbd6fbe138dcc74382656f81b18dd2f,
         type: 3}
       propertyPath: m_RootOrder
@@ -65592,6 +65612,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wood_Crate (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 7714876798109462850, guid: aa988a758ee394140b200cfa8bfbbbb5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8561076723074372510, guid: aa988a758ee394140b200cfa8bfbbbb5,
         type: 3}
       propertyPath: m_RootOrder
@@ -73356,6 +73381,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Wood_Crate
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714876798109462850, guid: aa988a758ee394140b200cfa8bfbbbb5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8561076723074372510, guid: aa988a758ee394140b200cfa8bfbbbb5,
         type: 3}
