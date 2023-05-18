@@ -10,7 +10,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
     RaycastHit hitLayerMask;
     public Vector3 thisPos;
     GameObject virtualObject;
-    GameObject abovePlaneObject;
+    public GameObject abovePlaneObject;
     public float objectHeight;
     public float objectHeightX;
     public float objectHeightY;
@@ -82,6 +82,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         virtualObject.transform.GetChild(0).gameObject.GetComponent<VirtualObjectTrigger>().cargoManager = this.GetComponent<Cargo>();
         virtualObject.SetActive(false);
 
+        // VirtualPlane에 높이를 맞춰줄 오브젝트 생성
         abovePlaneObject = Instantiate(Objectpivot, Objectpivot.transform);
         Destroy(abovePlaneObject.transform.GetChild(0).GetComponentInChildren<Cargo>());
         Destroy(abovePlaneObject.transform.GetChild(0).GetComponentInChildren<CargoInfo>());
@@ -113,8 +114,8 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         meshCollider = this.GetComponent<MeshCollider>();
         meshCollider.convex = true;
         objectHeightX = meshCollider.bounds.size.x;
-        objectHeightY = meshCollider.bounds.size.y;
-        objectHeightZ = meshCollider.bounds.size.z; // extents로 할 경우 x,y,z축과 상관없는 오브젝트의 높이, 하지만 높이가 안맞음
+        objectHeightY = meshCollider.bounds.size.y; // extents로 할 경우 x,y,z축과 상관없는 오브젝트의 높이, 하지만 높이가 안맞음
+        objectHeightZ = meshCollider.bounds.size.z; 
 
         objectHeight = objectHeightY;
 
@@ -164,19 +165,19 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
                 return;
             }
 
-            RaycastHit sweepTestHitSelected = sweepTestHitAll[0];
+            //RaycastHit sweepTestHitSelected = sweepTestHitAll[0];
 
             foreach (RaycastHit sweepTestHit in sweepTestHitAll)
             {
                 if (sweepTestHit.collider.tag == "VirtualPlane")
                 {
-                    
+                    /*
                     if (sweepTestHitSelected.distance > sweepTestHit.distance || sweepTestHitSelected.collider.tag != "VirtualPlane")
                     {
                         sweepTestHitSelected = sweepTestHit;
                     }
-                    
-                    float height = abovePlaneObject.transform.position.y - (sweepTestHitSelected.distance);
+                    */
+                    float height = abovePlaneObject.transform.position.y - (sweepTestHit.distance);
                     Objectpivot.transform.position = new Vector3(hitLayerMask.point.x, height, hitLayerMask.point.z);
                 }
             }
