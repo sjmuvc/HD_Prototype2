@@ -207,6 +207,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         {
             Objectpivot.transform.position = virtualObjectPos;
             rigidBody.isKinematic = false;
+            abovePlaneObject.transform.GetChild(0).GetComponent<MeshCollider>().enabled = false;
             Cacher.cargoManager.uldObjects.Add(this.gameObject);
             Cacher.cargoManager.cargoZoneObjects.Remove(this.gameObject);
             Cacher.uiManager.GetComponent<ULDInfoPanel>().AddCargo(GetComponent<CargoInfo>());
@@ -366,7 +367,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
             Objectpivot.transform.localPosition = startPosition;
             Objectpivot.transform.localEulerAngles = startLocalEulerAngles;
         }
-
+        abovePlaneObject.transform.GetChild(0).GetComponent<MeshCollider>().enabled = true;
     }
 
     void SettingObjectTransform()

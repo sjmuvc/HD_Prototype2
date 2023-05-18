@@ -44,13 +44,11 @@ public class InputManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.T))
         {
-            //objectPivot.transform.GetChild(0).GetComponent<Cargo>().objectHeight = objectPivot.transform.GetChild(0).GetComponent<Cargo>().objectHeightX;
             objectPivot.transform.Rotate(rotateValue, 0, 0, Space.World);
             ResetSimulation(objectPivot);
         }
         else if (Input.GetKeyDown(KeyCode.Y))
         {
-            //objectPivot.transform.GetChild(0).GetComponent<Cargo>().objectHeight = objectPivot.transform.GetChild(0).GetComponent<Cargo>().objectHeightZ;
             objectPivot.transform.Rotate(0, 0, rotateValue, Space.World);
             ResetSimulation(objectPivot);
         }

@@ -89563,6 +89563,7 @@ GameObject:
   - component: {fileID: 6560098002934995126}
   - component: {fileID: 2304149757526386106}
   - component: {fileID: 5707947693977004717}
+  - component: {fileID: 6560098002934995127}
   m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
@@ -91355,6 +91356,19 @@ Transform:
   m_Father: {fileID: 2003409344}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &6560098002934995127
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 323983754446542591}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.6250887, y: 1.2315592, z: 8.750756e-15}
+  m_Center: {x: 0, y: -0.3025455, z: -1.8553907e-10}
 --- !u!23 &6572472223887120825
 MeshRenderer:
   m_ObjectHideFlags: 0
