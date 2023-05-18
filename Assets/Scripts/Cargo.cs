@@ -234,7 +234,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         if (active)
         {
             virtualObject.SetActive(active);
-            virtualObjectPos = new Vector3(Objectpivot.transform.position.x, currentStackHeight + objectHeight / 2, Objectpivot.transform.position.z);
+            virtualObjectPos = new Vector3(Objectpivot.transform.position.x, currentStackHeight, Objectpivot.transform.position.z);
             virtualObject.transform.position = virtualObjectPos;
         }
         else
@@ -308,7 +308,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
                 {
                     sweepTestHitSelected = sweepTestHit;
                 }
-                float rayHeight = Cacher.uldManager.currentULD.virtualPlaneHeight - (sweepTestHitSelected.distance);
+                float rayHeight = Objectpivot.transform.position.y - (sweepTestHitSelected.distance);
                 currentStackHeight = rayHeight;
             }
         }
@@ -377,7 +377,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
 
     public void SettingVirtualObjectTransform(Vector3 thisPos)
     {
-        virtualObject.transform.position = new Vector3(thisPos.x, currentStackHeight + objectHeight / 2, thisPos.z);
+        virtualObject.transform.position = new Vector3(thisPos.x, currentStackHeight, thisPos.z);
         virtualObject.transform.GetChild(0).gameObject.transform.localPosition = settingPivotPosition;
         virtualObject.transform.GetChild(0).gameObject.transform.localEulerAngles = settingPivotRotation;
         simulationTime = 0;
