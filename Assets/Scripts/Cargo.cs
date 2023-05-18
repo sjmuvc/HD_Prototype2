@@ -25,6 +25,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
     MeshCollider meshCollider;
     public Vector3 startPosition;
     public Vector3 startLocalEulerAngles;
+    Vector3 virtualObjectPos;
 
     float cameraToObjectDistance = 20;
     float mouseRayDistance = 1000;
@@ -229,19 +230,21 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
     void DrawVirtualObject(bool active)
     {
         thisPos = Objectpivot.GetComponent<Transform>().position;
-        lineRenderer.SetPosition(0, thisPos);
-        lineRenderer.SetPosition(1, new Vector3(thisPos.x, currentStackHeight + objectHeight / 2, thisPos.z)); // 내려갈 위치 stackHeight
-        lineRenderer.enabled = active;
 
         if (active)
         {
             virtualObject.SetActive(active);
-            virtualObject.transform.position = new Vector3(thisPos.x, currentStackHeight + objectHeight / 2, thisPos.z);
+            virtualObjectPos = new Vector3(thisPos.x, currentStackHeight + objectHeight / 2, thisPos.z);
+            virtualObject.transform.position = virtualObjectPos;
         }
         else
         {
             virtualObject.SetActive(active);
         }
+
+        lineRenderer.SetPosition(0, thisPos);
+        lineRenderer.SetPosition(1, virtualObjectPos);
+        lineRenderer.enabled = active;
 
         #region 시뮬레이션 기능
         currentPos = Objectpivot.transform.position; // currentPos 계속 업데이트
