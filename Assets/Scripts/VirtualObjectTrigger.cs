@@ -12,7 +12,6 @@ public class VirtualObjectTrigger : MonoBehaviour
         if (other.gameObject.CompareTag("Wall"))
         {
             cargoManager.isInsideTheWall = false;
-            //Debug.Log("Enter");
         }
     }
 
@@ -21,7 +20,6 @@ public class VirtualObjectTrigger : MonoBehaviour
         if (other.gameObject.CompareTag("Wall"))
         {
             cargoManager.isInsideTheWall = true;
-            //Debug.Log("Exit");
         }
     }
 }

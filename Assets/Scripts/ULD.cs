@@ -40,9 +40,4 @@ public class ULD : MonoBehaviour
             volume = 17.7f;
         }
     }
-
-    void ResetULD()
-    {
-
-    }
 }
