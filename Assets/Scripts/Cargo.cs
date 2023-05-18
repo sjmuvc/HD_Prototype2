@@ -91,6 +91,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         abovePlaneObject.transform.GetChild(0).gameObject.GetComponent<Rigidbody>().useGravity = true;
         abovePlaneObject.transform.GetChild(0).gameObject.GetComponent<Rigidbody>().isKinematic = true;
         abovePlaneObject.transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().enabled = false;
+        abovePlaneObject.transform.GetChild(0).GetComponent<MeshCollider>().enabled = false;
         for (int i = 0; i < abovePlaneObject.transform.GetChild(0).transform.childCount; i++) 
         {
             abovePlaneObject.transform.GetChild(0).transform.GetChild(i).gameObject.GetComponent<MeshRenderer>().enabled = false;
@@ -152,9 +153,8 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
             isOnVirtualPlane = true;
 
             #region VirtualPlane위의 높이 잡아주기 
-            //Objectpivot.transform.position = new Vector3(hitLayerMask.point.x, Cacher.uldManager.currentULD.virtualPlaneHeight * 2, hitLayerMask.point.z); // 객체의 위치를 RaycastHit의 point값 위치로 이동
-
             abovePlaneObject.transform.position = new Vector3(hitLayerMask.point.x, Cacher.uldManager.currentULD.virtualPlaneHeight * 2, hitLayerMask.point.z);
+            abovePlaneObject.transform.GetChild(0).GetComponent<MeshCollider>().enabled = true;
 
             RaycastHit[] sweepTestHitAll;
 
@@ -192,6 +192,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
             Objectpivot.transform.position = worldMousePos;
             isOnVirtualPlane = false;
             DrawVirtualObject(isOnVirtualPlane);
+            abovePlaneObject.transform.GetChild(0).GetComponent<MeshCollider>().enabled = false;
             Cacher.uldManager.currentULD.virtualPlaneMeshRenderer.enabled = true;
         }
     }
@@ -366,7 +367,6 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
             Objectpivot.transform.localPosition = startPosition;
             Objectpivot.transform.localEulerAngles = startLocalEulerAngles;
         }
-        abovePlaneObject.transform.GetChild(0).GetComponent<MeshCollider>().enabled = true;
     }
 
     void SettingObjectTransform()

@@ -9,7 +9,6 @@ public class ULDManager : MonoBehaviour
 
     private void Awake() 
     {
-        //currentULD = FindObjectOfType<ULD>();
         currentULD.Initialize();
     }
 
