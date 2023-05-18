@@ -139,7 +139,6 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         Cacher.cargoManager.AllFreeze(true);
         Cacher.inputManager.InPutRotate(Objectpivot);
         RayPositioning(worldMousePos);
-        Debug.Log(currentStackHeight);
     }
 
     void RayPositioning(Vector3 worldMousePos)
