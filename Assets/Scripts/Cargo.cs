@@ -205,7 +205,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
 
         if (isOnVirtualPlane && isEnableStack)
         {
-            Objectpivot.transform.position = new Vector3(Objectpivot.transform.position.x, currentStackHeight + objectHeight / 2, Objectpivot.transform.position.z);
+            Objectpivot.transform.position = virtualObjectPos;
             rigidBody.isKinematic = false;
             Cacher.cargoManager.uldObjects.Add(this.gameObject);
             Cacher.cargoManager.cargoZoneObjects.Remove(this.gameObject);
@@ -234,7 +234,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         if (active)
         {
             virtualObject.SetActive(active);
-            virtualObjectPos = new Vector3(thisPos.x, currentStackHeight + objectHeight / 2, thisPos.z);
+            virtualObjectPos = new Vector3(Objectpivot.transform.position.x, currentStackHeight + objectHeight / 2, Objectpivot.transform.position.z);
             virtualObject.transform.position = virtualObjectPos;
         }
         else
