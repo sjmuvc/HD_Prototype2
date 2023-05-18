@@ -278,7 +278,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         #endregion
 
         // 벽 안쪽이어야만 내려놓을 수 있음
-        if (isInsideTheWall == true && Cacher.uldManager.currentULD.virtualPlaneHeight > currentStackHeight + objectHeight)
+        if (isInsideTheWall == true)
         {
             EnableStack(true);
         }
