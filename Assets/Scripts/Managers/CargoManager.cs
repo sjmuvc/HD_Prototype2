@@ -37,7 +37,7 @@ public class CargoManager : MonoBehaviour
     {
         for (int i = 0; i < uldObjects.Count; i++)
         {
-            uldObjects[i].GetComponent<Cargo>().isPreviousCargo = true;
+            uldObjects[i].GetComponent<Cargo>().isUsingGeneratePos = true;
         }
         for (int i = 0; i < cargoZoneObjects.Count; i++)
         {
@@ -66,7 +66,7 @@ public class CargoManager : MonoBehaviour
                 cargoZoneObjects.Add(generatedCargo.gameObject);
                 currentGenerateCargo++;
                 generatedCargo.GetComponent<Cargo>().GenerateSetting();
-                CargoZonePositioning(generatedCargo.gameObject);
+                GeneratePositioning(generatedCargo.gameObject);
                 generatedCargo.startPosition = generatedCargo.Objectpivot.transform.localPosition;
                 generatedCargo.startLocalEulerAngles = generatedCargo.Objectpivot.transform.localEulerAngles;
             }
@@ -79,13 +79,13 @@ public class CargoManager : MonoBehaviour
             Cargo generatedCargo = Instantiate(cargos[remainCargoIndex], cargoZone.transform);
             cargoZoneObjects.Add(generatedCargo.gameObject);
             generatedCargo.GetComponent<Cargo>().GenerateSetting();
-            CargoZonePositioning(generatedCargo.gameObject);
+            GeneratePositioning(generatedCargo.gameObject);
             generatedCargo.startPosition = generatedCargo.Objectpivot.transform.localPosition;
             generatedCargo.startLocalEulerAngles = generatedCargo.Objectpivot.transform.localEulerAngles;
         }
     }
 
-    public void CargoZonePositioning(GameObject addedCargo)
+    public void GeneratePositioning(GameObject addedCargo)
     {
         addedCargo.GetComponent<Cargo>().Objectpivot.transform.localPosition = Vector3.zero;
         if (currentCargoZoneLength_X + addedCargo.GetComponent<MeshCollider>().bounds.size.x > cargoZoneLength_X)
@@ -114,11 +114,11 @@ public class CargoManager : MonoBehaviour
         }
     }
 
-    public void GotoObjectZoneAll()
+    public void GotoCargoZoneAll()
     {
         for(int i = 0; i < uldObjects.Count; i++)
         {
-            uldObjects[i].GetComponent<Cargo>().isPreviousCargo = true;
+            uldObjects[i].GetComponent<Cargo>().isUsingGeneratePos = true;
             uldObjects[i].GetComponent<Cargo>().GotoCargoZone();
             Cacher.cargoManager.cargoZoneObjects.Add(uldObjects[i]);
             

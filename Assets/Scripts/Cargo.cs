@@ -41,7 +41,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
     bool isSimulationOn;
     bool isEnableStack;
     int layerName;
-    public bool isPreviousCargo = false;
+    public bool isUsingGeneratePos = false;
     float virtualPlaneSetHeight;
 
     public void GenerateSetting()
@@ -161,24 +161,16 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
             RaycastHit[] sweepTestHitAll;
 
             sweepTestHitAll = abovePlaneObject.transform.GetChild(0).GetComponent<Rigidbody>().SweepTestAll(new Vector3(0, -1, 0), Cacher.uldManager.currentULD.virtualPlaneHeight * 2, QueryTriggerInteraction.Ignore);
-            /*
-            if (sweepTestHitAll.Length == 0)
-            {
-                return;
-            }
-            */
-            
+
             foreach (RaycastHit sweepTestHit in sweepTestHitAll)
             {
                 if (sweepTestHit.collider.tag == "VirtualPlane")
                 {
                     virtualPlaneSetHeight = abovePlaneObject.transform.position.y - (sweepTestHit.distance);
                 }
-                Debug.Log(sweepTestHit.collider.name);
             }
             #endregion
 
-            //Objectpivot.transform.position = new Vector3(hitLayerMask.point.x, Cacher.uldManager.currentULD.virtualPlaneHeight, hitLayerMask.point.z);
             DetectStackHeight();
             DrawVirtualObject(isOnVirtualPlane);
             Cacher.uldManager.currentULD.virtualPlaneMeshRenderer.enabled = false;
@@ -355,9 +347,12 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         SettingObjectTransform();
         Objectpivot.transform.parent = Cacher.cargoManager.cargoZone.transform.Find("Objects").gameObject.transform;
         // uld 안에 있었을 경우 CargoZonePositioning 방식 적용
-        if (Cacher.cargoManager.uldObjects.Contains(this.gameObject) || isPreviousCargo == true)
+        if (isUsingGeneratePos == true)
         {
-            Cacher.cargoManager.CargoZonePositioning(this.gameObject);
+            Cacher.cargoManager.GeneratePositioning(this.gameObject);
+            startPosition = Objectpivot.transform.localPosition;
+            startLocalEulerAngles = Objectpivot.transform.localEulerAngles;
+            isUsingGeneratePos = false;
         }
         else
         {
