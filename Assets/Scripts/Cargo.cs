@@ -84,7 +84,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         virtualObject.SetActive(false);
 
         // VirtualPlane에 높이를 맞춰줄 오브젝트 생성
-        abovePlaneObject = Instantiate(Objectpivot, Objectpivot.transform);
+        abovePlaneObject = Instantiate(Objectpivot, Cacher.cargoManager.abovePlaneObjects.transform);
         Destroy(abovePlaneObject.transform.GetChild(0).GetComponentInChildren<Cargo>());
         Destroy(abovePlaneObject.transform.GetChild(0).GetComponentInChildren<CargoInfo>());
         Destroy(abovePlaneObject.transform.GetChild(0).GetComponentInChildren<LineRenderer>());

@@ -16,6 +16,7 @@ public class CargoManager : MonoBehaviour
     float currentCargoZoneLength_Z;
     float longestAxis_Z;
     float axisSpacing_Z;
+    public GameObject abovePlaneObjects;
 
     public List<GameObject> cargoZoneObjects = new List<GameObject>();  
     public List<GameObject> uldObjects = new List<GameObject>();
@@ -29,6 +30,7 @@ public class CargoManager : MonoBehaviour
         cargoZonePlane = GameObject.Find("CargoZonePlane");
         cargoZoneLength_X = cargoZonePlane.GetComponent<MeshCollider>().bounds.size.x;
         cargoZoneLength_Z = cargoZonePlane.GetComponent<MeshCollider>().bounds.size.z;
+        abovePlaneObjects = GameObject.Find("AbovePlaneObjects");
     }
 
     public void GenerateCargo(int cargosQuantity)
