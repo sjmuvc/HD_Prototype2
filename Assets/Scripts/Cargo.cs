@@ -12,9 +12,9 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
     GameObject virtualObject;
     public GameObject abovePlaneObject;
     public float objectHeight;
-    public float objectHeightX;
-    public float objectHeightY;
-    public float objectHeightZ;
+    public float originBoundsX;
+    public float originBoundsY;
+    public float originBoundsZ;
     Vector3 pivot;
     public GameObject Objectpivot;
     Vector3 settingPivotPosition;
@@ -114,11 +114,11 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         }
         meshCollider = this.GetComponent<MeshCollider>();
         meshCollider.convex = true;
-        objectHeightX = meshCollider.bounds.size.x;
-        objectHeightY = meshCollider.bounds.size.y; // extents로 할 경우 x,y,z축과 상관없는 오브젝트의 높이, 하지만 높이가 안맞음
-        objectHeightZ = meshCollider.bounds.size.z; 
+        originBoundsX = meshCollider.bounds.size.x;
+        originBoundsY = meshCollider.bounds.size.y; // extents로 할 경우 x,y,z축과 상관없는 오브젝트의 높이, 하지만 높이가 안맞음
+        originBoundsZ = meshCollider.bounds.size.z; 
 
-        objectHeight = objectHeightY;
+        objectHeight = originBoundsY;
 
         // rigidBody 생성
         this.gameObject.AddComponent<Rigidbody>();
@@ -346,12 +346,11 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
     {
         SettingObjectTransform();
         Objectpivot.transform.parent = Cacher.cargoManager.cargoZone.transform.Find("Objects").gameObject.transform;
-        // uld 안에 있었을 경우 CargoZonePositioning 방식 적용
+        // CargoZonePositioning 방식 적용
         if (isUsingGeneratePos == true)
         {
             Cacher.cargoManager.GeneratePositioning(this.gameObject);
             startPosition = Objectpivot.transform.localPosition;
-            startLocalEulerAngles = Objectpivot.transform.localEulerAngles;
             isUsingGeneratePos = false;
         }
         else

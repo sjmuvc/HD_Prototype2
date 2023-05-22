@@ -12,7 +12,7 @@ public class CargoManager : MonoBehaviour
     public GameObject dragObject;
     float cargoZoneLength_X;
     float cargoZoneLength_Z;
-    float currentCargoZoneLength_X;
+    public float currentCargoZoneLength_X;
     float currentCargoZoneLength_Z;
     float longestAxis_Z;
     float axisSpacing_Z;
@@ -87,6 +87,7 @@ public class CargoManager : MonoBehaviour
 
     public void GeneratePositioning(GameObject addedCargo)
     {
+        addedCargo.GetComponent<Cargo>().Objectpivot.transform.localEulerAngles = Vector3.zero;
         addedCargo.GetComponent<Cargo>().Objectpivot.transform.localPosition = Vector3.zero;
         if (currentCargoZoneLength_X + addedCargo.GetComponent<MeshCollider>().bounds.size.x > cargoZoneLength_X)
         {
