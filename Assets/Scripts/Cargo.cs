@@ -10,6 +10,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
     RaycastHit hitLayerMask;
     public Vector3 thisPos;
     GameObject virtualObject;
+    public GameObject abovePlaneObject;
     public float objectHeight;
     public float objectHeightX;
     public float objectHeightY;
@@ -24,8 +25,9 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
     MeshCollider meshCollider;
     public Vector3 startPosition;
     public Vector3 startLocalEulerAngles;
+    Vector3 virtualObjectPos;
 
-    float cameraToObjectDistance = 10;
+    float cameraToObjectDistance = 20;
     float mouseRayDistance = 1000;
     bool isOnVirtualPlane = false;
     float currentStackHeight;
@@ -40,17 +42,22 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
     bool isEnableStack;
     int layerName;
     public bool isPreviousCargo = false;
+    float virtualPlaneSetHeight;
 
     public void GenerateSetting()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         this.gameObject.tag = "StackObject";
+        for (int i = 0; i < this.transform.childCount; i++) 
+        {
+            this.gameObject.transform.GetChild(i).tag = "StackObject";
+        }
         layerName = LayerMask.NameToLayer("Cargo");
         this.gameObject.layer = layerName;
 
         AddComponenet();
 
-        // �θ� ������Ʈ ������ �ùٸ� �Ǻ� ����
+        // 부모 오브젝트 생성후 올바른 피봇 지정
         pivot = GetComponent<MeshCollider>().bounds.center;
         Objectpivot = new GameObject();
         Objectpivot.transform.position = pivot;
@@ -59,7 +66,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         settingPivotRotation = this.transform.localEulerAngles;
         Objectpivot.name = this.gameObject.name;
 
-        // �Ǻ� ��ġ�� ���� ���� ������Ʈ �����ϰ� false
+        // 피봇 위치를 맞춘 가상 오브젝트 생성하고 false
         virtualObject = Instantiate(Objectpivot, Objectpivot.transform);
         Destroy(virtualObject.GetComponentInChildren<Cargo>());
         Destroy(virtualObject.GetComponentInChildren<LineRenderer>());
@@ -68,9 +75,31 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         virtualObject.transform.GetChild(0).gameObject.GetComponent<Rigidbody>().isKinematic = true;
         virtualObjectOriginMat = gameManager.greenMaterial;
         virtualObject.transform.GetChild(0).gameObject.tag = "Untagged";
+        for (int i = 0; i < virtualObject.transform.GetChild(0).transform.childCount; i++)
+        {
+            virtualObject.transform.GetChild(0).transform.GetChild(i).tag = "Untagged";
+        }
         virtualObject.transform.GetChild(0).gameObject.AddComponent<VirtualObjectTrigger>();
         virtualObject.transform.GetChild(0).gameObject.GetComponent<VirtualObjectTrigger>().cargoManager = this.GetComponent<Cargo>();
         virtualObject.SetActive(false);
+
+        // VirtualPlane에 높이를 맞춰줄 오브젝트 생성
+        abovePlaneObject = Instantiate(Objectpivot, Cacher.cargoManager.abovePlaneObjects.transform);
+        Destroy(abovePlaneObject.transform.GetChild(0).GetComponentInChildren<Cargo>());
+        Destroy(abovePlaneObject.transform.GetChild(0).GetComponentInChildren<CargoInfo>());
+        Destroy(abovePlaneObject.transform.GetChild(0).GetComponentInChildren<LineRenderer>());
+
+        abovePlaneObject.transform.GetChild(0).gameObject.GetComponent<MeshCollider>().convex = true;
+        abovePlaneObject.transform.GetChild(0).gameObject.GetComponent<Rigidbody>().useGravity = true;
+        abovePlaneObject.transform.GetChild(0).gameObject.GetComponent<Rigidbody>().isKinematic = true;
+        abovePlaneObject.transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().enabled = false;
+        abovePlaneObject.transform.GetChild(0).GetComponent<MeshCollider>().enabled = false;
+        for (int i = 0; i < abovePlaneObject.transform.GetChild(0).transform.childCount; i++) 
+        {
+            abovePlaneObject.transform.GetChild(0).transform.GetChild(i).gameObject.GetComponent<MeshRenderer>().enabled = false;
+        }
+        abovePlaneObject.transform.GetChild(0).gameObject.tag = "Untagged";
+        Destroy(abovePlaneObject.transform.GetChild(1).gameObject);
 
         SettingObjectTransform();
         Objectpivot.transform.parent = Cacher.cargoManager.cargoZone.transform.Find("Objects").gameObject.transform;
@@ -78,7 +107,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
 
     void AddComponenet()
     {
-        // Mesh Collider ����
+        // Mesh Collider 생성
         if (this.gameObject.GetComponent<MeshCollider>() == null)
         {
             this.gameObject.AddComponent<MeshCollider>();
@@ -86,19 +115,19 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         meshCollider = this.GetComponent<MeshCollider>();
         meshCollider.convex = true;
         objectHeightX = meshCollider.bounds.size.x;
-        objectHeightY = meshCollider.bounds.size.y;
-        objectHeightZ = meshCollider.bounds.size.z; // extents�� �� ��� x,y,z��� ������� ������Ʈ�� ����, ������ ���̰� �ȸ���
+        objectHeightY = meshCollider.bounds.size.y; // extents로 할 경우 x,y,z축과 상관없는 오브젝트의 높이, 하지만 높이가 안맞음
+        objectHeightZ = meshCollider.bounds.size.z; 
 
         objectHeight = objectHeightY;
 
-        // rigidBody ����
+        // rigidBody 생성
         this.gameObject.AddComponent<Rigidbody>();
         rigidBody = this.GetComponent<Rigidbody>();
         rigidBody.useGravity = true;
         rigidBody.isKinematic = true;
         rigidBody.collisionDetectionMode = CollisionDetectionMode.Continuous;
 
-        // ���� ������ ����
+        // 라인 렌더러 생성
         this.gameObject.AddComponent<LineRenderer>();
         lineRenderer = this.GetComponent<LineRenderer>();
         lineRenderer.material = gameManager.lineMaterial;
@@ -109,13 +138,10 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
     private void OnMouseDrag()
     {
         Vector3 mousePos = Input.mousePosition;
-        Vector3 worldMousePos = Cacher.uiManager.mainCamera.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, cameraToObjectDistance)); // ī�޶�κ��� �Ÿ���
-        Objectpivot.transform.position = worldMousePos;
+        Vector3 worldMousePos = Cacher.uiManager.mainCamera.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, cameraToObjectDistance)); // 카메라로부터 거리값
         Cacher.cargoManager.AllFreeze(true);
         Cacher.inputManager.InPutRotate(Objectpivot);
         RayPositioning(worldMousePos);
-
-
     }
 
     void RayPositioning(Vector3 worldMousePos)
@@ -123,19 +149,47 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         Ray ray = Cacher.uiManager.mainCamera.ScreenPointToRay(Input.mousePosition);
         Debug.DrawRay(ray.origin, ray.direction * mouseRayDistance, Color.red);
 
-        int layerMask = 1 << LayerMask.NameToLayer("Virtual Plane"); // Layer�� Virtual Plane�� �͸� ����
-        if (Physics.Raycast(ray, out hitLayerMask, Mathf.Infinity, layerMask)) // layerMask�� ���� RaycastHit ��ȯ
+        int layerMask = 1 << LayerMask.NameToLayer("Virtual Plane"); // Layer가 Virtual Plane인 것만 검출
+        if (Physics.Raycast(ray, out hitLayerMask, Mathf.Infinity, layerMask)) // layerMask에 닿은 RaycastHit 반환
         {
             isOnVirtualPlane = true;
-            Objectpivot.transform.position = new Vector3(hitLayerMask.point.x, Cacher.uldManager.currentULD.virtualPlaneHeight + (objectHeight / 2) - 0.00001f, hitLayerMask.point.z); // ��ü�� ��ġ�� RaycastHit�� point�� ��ġ�� �̵�
+
+            #region VirtualPlane위의 높이 잡아주기 
+            abovePlaneObject.transform.position = new Vector3(hitLayerMask.point.x, Cacher.uldManager.currentULD.virtualPlaneHeight * 2, hitLayerMask.point.z);
+            abovePlaneObject.transform.GetChild(0).GetComponent<MeshCollider>().enabled = true;
+
+            RaycastHit[] sweepTestHitAll;
+
+            sweepTestHitAll = abovePlaneObject.transform.GetChild(0).GetComponent<Rigidbody>().SweepTestAll(new Vector3(0, -1, 0), Cacher.uldManager.currentULD.virtualPlaneHeight * 2, QueryTriggerInteraction.Ignore);
+            /*
+            if (sweepTestHitAll.Length == 0)
+            {
+                return;
+            }
+            */
+            
+            foreach (RaycastHit sweepTestHit in sweepTestHitAll)
+            {
+                if (sweepTestHit.collider.tag == "VirtualPlane")
+                {
+                    virtualPlaneSetHeight = abovePlaneObject.transform.position.y - (sweepTestHit.distance);
+                }
+                Debug.Log(sweepTestHit.collider.name);
+            }
+            #endregion
+
+            //Objectpivot.transform.position = new Vector3(hitLayerMask.point.x, Cacher.uldManager.currentULD.virtualPlaneHeight, hitLayerMask.point.z);
             DetectStackHeight();
             DrawVirtualObject(isOnVirtualPlane);
             Cacher.uldManager.currentULD.virtualPlaneMeshRenderer.enabled = false;
+            Objectpivot.transform.position = new Vector3(hitLayerMask.point.x, virtualPlaneSetHeight, hitLayerMask.point.z);
         }
         else
         {
+            Objectpivot.transform.position = worldMousePos;
             isOnVirtualPlane = false;
             DrawVirtualObject(isOnVirtualPlane);
+            abovePlaneObject.transform.GetChild(0).GetComponent<MeshCollider>().enabled = false;
             Cacher.uldManager.currentULD.virtualPlaneMeshRenderer.enabled = true;
         }
     }
@@ -148,8 +202,9 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
 
         if (isOnVirtualPlane && isEnableStack)
         {
-            Objectpivot.transform.position = new Vector3(Objectpivot.transform.position.x, currentStackHeight + objectHeight / 2, Objectpivot.transform.position.z);
+            Objectpivot.transform.position = virtualObjectPos;
             rigidBody.isKinematic = false;
+            abovePlaneObject.transform.GetChild(0).GetComponent<MeshCollider>().enabled = false;
             Cacher.cargoManager.uldObjects.Add(this.gameObject);
             Cacher.cargoManager.cargoZoneObjects.Remove(this.gameObject);
             Cacher.uiManager.GetComponent<ULDInfoPanel>().AddCargo(GetComponent<CargoInfo>());
@@ -173,23 +228,25 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
     void DrawVirtualObject(bool active)
     {
         thisPos = Objectpivot.GetComponent<Transform>().position;
-        lineRenderer.SetPosition(0, thisPos);
-        lineRenderer.SetPosition(1, new Vector3(thisPos.x, currentStackHeight + objectHeight / 2, thisPos.z)); // ������ ��ġ stackHeight
-        lineRenderer.enabled = active;
 
         if (active)
         {
             virtualObject.SetActive(active);
-            virtualObject.transform.position = new Vector3(thisPos.x, currentStackHeight + objectHeight / 2, thisPos.z);
+            virtualObjectPos = new Vector3(Objectpivot.transform.position.x, currentStackHeight, Objectpivot.transform.position.z);
+            virtualObject.transform.position = virtualObjectPos;
         }
         else
         {
             virtualObject.SetActive(active);
         }
 
-        #region �ùķ��̼� ���
-        currentPos = Objectpivot.transform.position; // currentPos ��� ������Ʈ
-        StartCoroutine(LastPosSetting(currentPos));  // lastPos�� �����̸� �ΰ� ������Ʈ
+        lineRenderer.SetPosition(0, thisPos);
+        lineRenderer.SetPosition(1, virtualObjectPos);
+        lineRenderer.enabled = active;
+
+        #region 시뮬레이션 기능
+        currentPos = Objectpivot.transform.position; // currentPos 계속 업데이트
+        StartCoroutine(LastPosSetting(currentPos));  // lastPos는 딜레이를 두고 업데이트
 
         time += Time.deltaTime;
 
@@ -199,7 +256,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
             lastPos = currentPos;
         }
 
-        if (time > delayTimeToSimulation && currentPos == lastPos) // 1�� �̻� ������ ������ �ùķ��̼� ����
+        if (time > delayTimeToSimulation && currentPos == lastPos) // 1초 이상 움직임 없으면 시뮬레이션 시작
         {
             Simulation(true);
 
@@ -209,7 +266,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
                 SettingVirtualObjectTransform(thisPos);
             }
         }
-        else if (currentPos != lastPos) // �����̸� �ùķ��̼� ����
+        else if (currentPos != lastPos) // 움직이면 시뮬레이션 종료
         {
             Simulation(false);
 
@@ -218,8 +275,8 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         }
         #endregion
 
-        // �� �����̾�߸� �������� �� ����
-        if (isInsideTheWall == true && Cacher.uldManager.currentULD.virtualPlaneHeight > currentStackHeight + objectHeight)
+        // 벽 안쪽이어야만 내려놓을 수 있음
+        if (isInsideTheWall == true)
         {
             EnableStack(true);
         }
@@ -233,7 +290,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
     {
         RaycastHit[] sweepTestHitAll;
 
-        sweepTestHitAll = rigidBody.SweepTestAll(-Objectpivot.transform.up, Cacher.uldManager.currentULD.virtualPlaneHeight + 5, QueryTriggerInteraction.Ignore);
+        sweepTestHitAll = rigidBody.SweepTestAll(new Vector3(0, -1, 0), Cacher.uldManager.currentULD.virtualPlaneHeight * 2, QueryTriggerInteraction.Ignore);
         if (sweepTestHitAll.Length == 0)
         {
             return;
@@ -249,7 +306,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
                 {
                     sweepTestHitSelected = sweepTestHit;
                 }
-                float rayHeight = Cacher.uldManager.currentULD.virtualPlaneHeight - (sweepTestHitSelected.distance);
+                float rayHeight = Objectpivot.transform.position.y - (sweepTestHitSelected.distance);
                 currentStackHeight = rayHeight;
             }
         }
@@ -297,7 +354,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
     {
         SettingObjectTransform();
         Objectpivot.transform.parent = Cacher.cargoManager.cargoZone.transform.Find("Objects").gameObject.transform;
-        // uld �ȿ� �־��� ��� CargoZonePositioning ��� ����
+        // uld 안에 있었을 경우 CargoZonePositioning 방식 적용
         if (Cacher.cargoManager.uldObjects.Contains(this.gameObject) || isPreviousCargo == true)
         {
             Cacher.cargoManager.CargoZonePositioning(this.gameObject);
@@ -307,7 +364,6 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
             Objectpivot.transform.localPosition = startPosition;
             Objectpivot.transform.localEulerAngles = startLocalEulerAngles;
         }
-        
     }
 
     void SettingObjectTransform()
@@ -318,7 +374,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
 
     public void SettingVirtualObjectTransform(Vector3 thisPos)
     {
-        virtualObject.transform.position = new Vector3(thisPos.x, currentStackHeight + objectHeight / 2, thisPos.z);
+        virtualObject.transform.position = new Vector3(thisPos.x, currentStackHeight, thisPos.z);
         virtualObject.transform.GetChild(0).gameObject.transform.localPosition = settingPivotPosition;
         virtualObject.transform.GetChild(0).gameObject.transform.localEulerAngles = settingPivotRotation;
         simulationTime = 0;
@@ -338,10 +394,15 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         }
     }
 
+    public void SetObjectHeight()
+    {
+
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         Cacher.uiManager.cloudPanel.ShowData(GetComponent<CargoInfo>(), true);
-        
+
     }
 
     public void OnPointerExit(PointerEventData eventData)

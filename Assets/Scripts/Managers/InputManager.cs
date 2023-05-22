@@ -39,20 +39,17 @@ public class InputManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            objectPivot.transform.GetChild(0).GetComponent<Cargo>().objectHeight = objectPivot.transform.GetChild(0).GetComponent<Cargo>().objectHeightY;
-            objectPivot.transform.Rotate(0, 90, 0, Space.World);
+            objectPivot.transform.Rotate(0, rotateValue, 0, Space.World);
             ResetSimulation(objectPivot);
         }
         else if (Input.GetKeyDown(KeyCode.T))
         {
-            objectPivot.transform.GetChild(0).GetComponent<Cargo>().objectHeight = objectPivot.transform.GetChild(0).GetComponent<Cargo>().objectHeightX;
-            objectPivot.transform.Rotate(90, 0, 0, Space.World);
+            objectPivot.transform.Rotate(rotateValue, 0, 0, Space.World);
             ResetSimulation(objectPivot);
         }
         else if (Input.GetKeyDown(KeyCode.Y))
         {
-            objectPivot.transform.GetChild(0).GetComponent<Cargo>().objectHeight = objectPivot.transform.GetChild(0).GetComponent<Cargo>().objectHeightZ;
-            objectPivot.transform.Rotate(0, 0,90, Space.World);
+            objectPivot.transform.Rotate(0, 0, rotateValue, Space.World);
             ResetSimulation(objectPivot);
         }
         //objectPivot.transform.localEulerAngles = tmpVector; 

@@ -9,7 +9,6 @@ public class ULDManager : MonoBehaviour
 
     private void Awake() 
     {
-        //currentULD = FindObjectOfType<ULD>();
         currentULD.Initialize();
     }
 
@@ -22,10 +21,9 @@ public class ULDManager : MonoBehaviour
     public void ChangeULD(int selectedULDNum)
     {
         Destroy(currentULD.gameObject);
-        currentULD = Instantiate(ulds[selectedULDNum]); // �� uld ����
+        currentULD = Instantiate(ulds[selectedULDNum]); 
         currentULD.Initialize();
-        currentULD.transform.position = new Vector3(2.55f, 0f, 19.4f
-        );
+        currentULD.transform.position = new Vector3(2.55f, 0f, 19.4f);
         ResetULD();
     }
 }

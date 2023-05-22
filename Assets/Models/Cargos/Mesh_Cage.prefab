@@ -333,7 +333,7 @@ GameObject:
   - component: {fileID: 5139685393734122607}
   m_Layer: 0
   m_Name: box1 (6)
-  m_TagString: StackObject
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
