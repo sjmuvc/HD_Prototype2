@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class CargoManager : MonoBehaviour
 {
-    //public Cargo[] cargoPrefabs;
     public Cargo[] cargos;
 
     public GameObject cargoZone;
@@ -31,16 +30,20 @@ public class CargoManager : MonoBehaviour
         cargoZonePlane = GameObject.Find("CargoZonePlane");
         cargoZoneLength_X = cargoZonePlane.GetComponent<MeshCollider>().bounds.size.x;
         cargoZoneLength_Z = cargoZonePlane.GetComponent<MeshCollider>().bounds.size.z;
-        abovePlaneObjects = GameObject.Find("AbovePlaneObjects");
-
-        CargoSizeSetting();
+        abovePlaneObjects = GameObject.Find("AbovePlaneObjects"); 
     }
 
-    void CargoSizeSetting()
+    public void CargoSizeSetting()
     {
         for (int i = 0; i < cargos.Length; i++)
         {
-            Debug.Log(cargos[i].GetComponent<MeshCollider>().bounds.size);
+            Cargo cargoPrefab = Instantiate(cargos[i]);
+            Debug.Log(cargoPrefab.GetComponent<MeshCollider>().bounds.size);
+            cargoPrefab.transform.localScale = new Vector3(1, 1, 1);
+
+            float cargoWidth = cargoPrefab.GetComponent<CargoInfo>().width;
+
+            
         }
     }
 

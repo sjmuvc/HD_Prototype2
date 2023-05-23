@@ -7,6 +7,8 @@ public class ULDManager : MonoBehaviour
     public ULD[] ulds;
     public ULD currentULD;
 
+    public float SCA_height = 297.7f;
+
     private void Awake() 
     {
         currentULD.Initialize();

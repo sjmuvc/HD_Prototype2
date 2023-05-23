@@ -6,7 +6,6 @@ public class DataManager : MonoBehaviour
 {
     private void Start()
     {
-        
         List<Dictionary<string, object>> csv_Data = CSVReader.Read("LibraryExmaple");
 
         for (int i = 0; i < csv_Data.Count; i++)
@@ -33,25 +32,8 @@ public class DataManager : MonoBehaviour
                     Cacher.cargoManager.cargos[i].GetComponent<CargoInfo>().priority = csv_Data[j]["priority"].ToString();
                 }
             }
-            
-             
-            
         }
-        
+
+        Cacher.cargoManager.CargoSizeSetting();
     }
-
-    public void Excel()
-    {
-        List<string> strings = new List<string>();
-
-        //Cacher.cargoManager.GenerateCargo(strings);
-
-
-    }
-    /*
-    public CargoInfo[] ParseCargoDB()
-    {
-        return 
-    }
-    */
 }
