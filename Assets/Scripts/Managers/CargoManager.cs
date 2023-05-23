@@ -93,17 +93,16 @@ public class CargoManager : MonoBehaviour
             // CargoZone의 오브젝트중 가장 긴 Z축의 값을 Z축 간격으로 설정
             for (int i = 0; i < cargoZoneObjects.Count; i++)
             {
-                if (longestAxis_Z < cargoZoneObjects[i].gameObject.GetComponent<MeshCollider>().bounds.size.z)
+                if (longestAxis_Z < cargoZoneObjects[i].gameObject.GetComponent<Cargo>().originBoundsZ)
                 {
-                    longestAxis_Z = cargoZoneObjects[i].gameObject.GetComponent<MeshCollider>().bounds.size.z;
+                    longestAxis_Z = cargoZoneObjects[i].gameObject.GetComponent<Cargo>().originBoundsZ;
                 }
             }
             axisSpacing_Z += longestAxis_Z;
             currentCargoZoneLength_X = 0;
         }
-        Debug.Log(new Vector3(currentCargoZoneLength_X + addedCargo.GetComponent<Cargo>().originBoundsX / 2, addedCargo.GetComponent<Cargo>().originBoundsY / 2, -axisSpacing_Z));
         addedCargo.GetComponent<Cargo>().Objectpivot.transform.localPosition = new Vector3(currentCargoZoneLength_X + addedCargo.GetComponent<Cargo>().originBoundsX / 2, addedCargo.GetComponent<Cargo>().originBoundsY / 2, -axisSpacing_Z);
-        currentCargoZoneLength_X += addedCargo.GetComponent<MeshCollider>().bounds.size.x;
+        currentCargoZoneLength_X += addedCargo.GetComponent<Cargo>().originBoundsX;
     }
 
     public void RemoveAtuldObjects()
