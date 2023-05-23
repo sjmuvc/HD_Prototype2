@@ -214,7 +214,6 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         Objectpivot.transform.parent = Cacher.uldManager.currentULD.uld.transform.Find("Objects").gameObject.transform;
         Cacher.cargoManager.dragObject = Objectpivot;
         SettingObjectTransform();
-        rigidBody.isKinematic = true;
     }
 
     void DrawVirtualObject(bool active)
@@ -344,11 +343,15 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
 
     public void GotoCargoZone()
     {
+        rigidBody.isKinematic = true;
         SettingObjectTransform();
         Objectpivot.transform.parent = Cacher.cargoManager.cargoZone.transform.Find("Objects").gameObject.transform;
         // CargoZonePositioning 방식 적용
         if (isUsingGeneratePos == true)
         {
+            Objectpivot.transform.localEulerAngles = Vector3.zero;
+            Objectpivot.transform.localPosition = Vector3.zero;
+            SettingObjectTransform();
             Cacher.cargoManager.GeneratePositioning(this.gameObject);
             startPosition = Objectpivot.transform.localPosition;
             isUsingGeneratePos = false;

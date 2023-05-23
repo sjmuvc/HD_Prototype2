@@ -62,7 +62,7 @@ public class CargoManager : MonoBehaviour
             }
             for (int j = 0; j < Mathf.Floor((cargosQuantity * cargos[cargoIndex].GetComponent<CargoInfo>().spawnRate)); j++) 
             {
-                Cargo generatedCargo = Instantiate(cargos[cargoIndex], cargoZone.transform);
+                Cargo generatedCargo = Instantiate(cargos[cargoIndex], cargoZone.transform.Find("Objects").gameObject.transform);
                 cargoZoneObjects.Add(generatedCargo.gameObject);
                 currentGenerateCargo++;
                 generatedCargo.GetComponent<Cargo>().GenerateSetting();
@@ -76,7 +76,7 @@ public class CargoManager : MonoBehaviour
         // 부족한 갯수는 spawnRate가 0인 오브젝트로 채움
         for (int i = 0; i < cargosQuantity - currentGenerateCargo; i++) 
         {
-            Cargo generatedCargo = Instantiate(cargos[remainCargoIndex], cargoZone.transform);
+            Cargo generatedCargo = Instantiate(cargos[remainCargoIndex], cargoZone.transform.Find("Objects").gameObject.transform);
             cargoZoneObjects.Add(generatedCargo.gameObject);
             generatedCargo.GetComponent<Cargo>().GenerateSetting();
             GeneratePositioning(generatedCargo.gameObject);
@@ -87,8 +87,7 @@ public class CargoManager : MonoBehaviour
 
     public void GeneratePositioning(GameObject addedCargo)
     {
-        addedCargo.GetComponent<Cargo>().Objectpivot.transform.localEulerAngles = Vector3.zero;
-        addedCargo.GetComponent<Cargo>().Objectpivot.transform.localPosition = Vector3.zero;
+        // X축 초과할 경우 Z축으로 이동
         if (currentCargoZoneLength_X + addedCargo.GetComponent<MeshCollider>().bounds.size.x > cargoZoneLength_X)
         {
             // CargoZone의 오브젝트중 가장 긴 Z축의 값을 Z축 간격으로 설정
