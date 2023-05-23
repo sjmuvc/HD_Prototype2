@@ -18,22 +18,13 @@ public class UIManager : MonoBehaviour
     {
         mainCamera = Camera.main;
     }
-
+    /*
     private void Update()
     {
         if (Cacher.cargoManager.dragObject != null)
         {
             text.text = Cacher.cargoManager.dragObject.transform.GetChild(0).GetComponent<Cargo>().abovePlaneObject.transform.position.ToString();
-            /*
-            if (Cacher.cargoManager.dragObject.transform.GetChild(0).GetComponent<Cargo>().isOnVirtualPlane == true)
-            {
-                text.text = "true";
-            }
-            else
-            {
-                text.text = "false";
-            }
-            */
         } 
     }
+    */
 }

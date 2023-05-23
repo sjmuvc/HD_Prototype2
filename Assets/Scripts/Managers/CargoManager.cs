@@ -12,7 +12,7 @@ public class CargoManager : MonoBehaviour
     public GameObject dragObject;
     float cargoZoneLength_X;
     float cargoZoneLength_Z;
-    float currentCargoZoneLength_X;
+    public float currentCargoZoneLength_X;
     float currentCargoZoneLength_Z;
     float longestAxis_Z;
     float axisSpacing_Z;
@@ -37,7 +37,7 @@ public class CargoManager : MonoBehaviour
     {
         for (int i = 0; i < uldObjects.Count; i++)
         {
-            uldObjects[i].GetComponent<Cargo>().isPreviousCargo = true;
+            uldObjects[i].GetComponent<Cargo>().isUsingGeneratePos = true;
         }
         for (int i = 0; i < cargoZoneObjects.Count; i++)
         {
@@ -62,11 +62,11 @@ public class CargoManager : MonoBehaviour
             }
             for (int j = 0; j < Mathf.Floor((cargosQuantity * cargos[cargoIndex].GetComponent<CargoInfo>().spawnRate)); j++) 
             {
-                Cargo generatedCargo = Instantiate(cargos[cargoIndex], cargoZone.transform);
+                Cargo generatedCargo = Instantiate(cargos[cargoIndex], cargoZone.transform.Find("Objects").gameObject.transform);
                 cargoZoneObjects.Add(generatedCargo.gameObject);
                 currentGenerateCargo++;
                 generatedCargo.GetComponent<Cargo>().GenerateSetting();
-                CargoZonePositioning(generatedCargo.gameObject);
+                GeneratePositioning(generatedCargo.gameObject);
                 generatedCargo.startPosition = generatedCargo.Objectpivot.transform.localPosition;
                 generatedCargo.startLocalEulerAngles = generatedCargo.Objectpivot.transform.localEulerAngles;
             }
@@ -76,33 +76,33 @@ public class CargoManager : MonoBehaviour
         // 부족한 갯수는 spawnRate가 0인 오브젝트로 채움
         for (int i = 0; i < cargosQuantity - currentGenerateCargo; i++) 
         {
-            Cargo generatedCargo = Instantiate(cargos[remainCargoIndex], cargoZone.transform);
+            Cargo generatedCargo = Instantiate(cargos[remainCargoIndex], cargoZone.transform.Find("Objects").gameObject.transform);
             cargoZoneObjects.Add(generatedCargo.gameObject);
             generatedCargo.GetComponent<Cargo>().GenerateSetting();
-            CargoZonePositioning(generatedCargo.gameObject);
+            GeneratePositioning(generatedCargo.gameObject);
             generatedCargo.startPosition = generatedCargo.Objectpivot.transform.localPosition;
             generatedCargo.startLocalEulerAngles = generatedCargo.Objectpivot.transform.localEulerAngles;
         }
     }
 
-    public void CargoZonePositioning(GameObject addedCargo)
+    public void GeneratePositioning(GameObject addedCargo)
     {
-        addedCargo.GetComponent<Cargo>().Objectpivot.transform.localPosition = Vector3.zero;
-        if (currentCargoZoneLength_X + addedCargo.GetComponent<MeshCollider>().bounds.size.x > cargoZoneLength_X)
+        // X축 초과할 경우 Z축으로 이동
+        if (currentCargoZoneLength_X + addedCargo.GetComponent<Cargo>().originBoundsX > cargoZoneLength_X)
         {
             // CargoZone의 오브젝트중 가장 긴 Z축의 값을 Z축 간격으로 설정
             for (int i = 0; i < cargoZoneObjects.Count; i++)
             {
-                if (longestAxis_Z < cargoZoneObjects[i].gameObject.GetComponent<MeshCollider>().bounds.size.z)
+                if (longestAxis_Z < cargoZoneObjects[i].gameObject.GetComponent<Cargo>().originBoundsZ)
                 {
-                    longestAxis_Z = cargoZoneObjects[i].gameObject.GetComponent<MeshCollider>().bounds.size.z;
+                    longestAxis_Z = cargoZoneObjects[i].gameObject.GetComponent<Cargo>().originBoundsZ;
                 }
             }
             axisSpacing_Z += longestAxis_Z;
             currentCargoZoneLength_X = 0;
         }
-        addedCargo.GetComponent<Cargo>().Objectpivot.transform.localPosition = new Vector3(currentCargoZoneLength_X + addedCargo.GetComponent<MeshCollider>().bounds.size.x / 2, addedCargo.GetComponent<MeshCollider>().bounds.size.y / 2, -axisSpacing_Z);
-        currentCargoZoneLength_X += addedCargo.GetComponent<MeshCollider>().bounds.size.x;
+        addedCargo.GetComponent<Cargo>().Objectpivot.transform.localPosition = new Vector3(currentCargoZoneLength_X + addedCargo.GetComponent<Cargo>().originBoundsX / 2, addedCargo.GetComponent<Cargo>().originBoundsY / 2, -axisSpacing_Z);
+        currentCargoZoneLength_X += addedCargo.GetComponent<Cargo>().originBoundsX;
     }
 
     public void RemoveAtuldObjects()
@@ -114,14 +114,13 @@ public class CargoManager : MonoBehaviour
         }
     }
 
-    public void GotoObjectZoneAll()
+    public void GotoCargoZoneAll()
     {
         for(int i = 0; i < uldObjects.Count; i++)
         {
-            uldObjects[i].GetComponent<Cargo>().isPreviousCargo = true;
+            //uldObjects[i].GetComponent<Cargo>().isUsingGeneratePos = true;
             uldObjects[i].GetComponent<Cargo>().GotoCargoZone();
-            Cacher.cargoManager.cargoZoneObjects.Add(uldObjects[i]);
-            
+            Cacher.cargoManager.cargoZoneObjects.Add(uldObjects[i]);  
         }
         uldObjects.Clear();
     }

@@ -12,9 +12,9 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
     GameObject virtualObject;
     public GameObject abovePlaneObject;
     public float objectHeight;
-    public float objectHeightX;
-    public float objectHeightY;
-    public float objectHeightZ;
+    public float originBoundsX;
+    public float originBoundsY;
+    public float originBoundsZ;
     Vector3 pivot;
     public GameObject Objectpivot;
     Vector3 settingPivotPosition;
@@ -41,7 +41,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
     bool isSimulationOn;
     bool isEnableStack;
     int layerName;
-    public bool isPreviousCargo = false;
+    public bool isUsingGeneratePos = false;
     float virtualPlaneSetHeight;
 
     public void GenerateSetting()
@@ -114,11 +114,11 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         }
         meshCollider = this.GetComponent<MeshCollider>();
         meshCollider.convex = true;
-        objectHeightX = meshCollider.bounds.size.x;
-        objectHeightY = meshCollider.bounds.size.y; // extents로 할 경우 x,y,z축과 상관없는 오브젝트의 높이, 하지만 높이가 안맞음
-        objectHeightZ = meshCollider.bounds.size.z; 
+        originBoundsX = meshCollider.bounds.size.x;
+        originBoundsY = meshCollider.bounds.size.y; // extents로 할 경우 x,y,z축과 상관없는 오브젝트의 높이, 하지만 높이가 안맞음
+        originBoundsZ = meshCollider.bounds.size.z; 
 
-        objectHeight = objectHeightY;
+        objectHeight = originBoundsY;
 
         // rigidBody 생성
         this.gameObject.AddComponent<Rigidbody>();
@@ -161,24 +161,16 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
             RaycastHit[] sweepTestHitAll;
 
             sweepTestHitAll = abovePlaneObject.transform.GetChild(0).GetComponent<Rigidbody>().SweepTestAll(new Vector3(0, -1, 0), Cacher.uldManager.currentULD.virtualPlaneHeight * 2, QueryTriggerInteraction.Ignore);
-            /*
-            if (sweepTestHitAll.Length == 0)
-            {
-                return;
-            }
-            */
-            
+
             foreach (RaycastHit sweepTestHit in sweepTestHitAll)
             {
                 if (sweepTestHit.collider.tag == "VirtualPlane")
                 {
                     virtualPlaneSetHeight = abovePlaneObject.transform.position.y - (sweepTestHit.distance);
                 }
-                Debug.Log(sweepTestHit.collider.name);
             }
             #endregion
 
-            //Objectpivot.transform.position = new Vector3(hitLayerMask.point.x, Cacher.uldManager.currentULD.virtualPlaneHeight, hitLayerMask.point.z);
             DetectStackHeight();
             DrawVirtualObject(isOnVirtualPlane);
             Cacher.uldManager.currentULD.virtualPlaneMeshRenderer.enabled = false;
@@ -222,7 +214,6 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         Objectpivot.transform.parent = Cacher.uldManager.currentULD.uld.transform.Find("Objects").gameObject.transform;
         Cacher.cargoManager.dragObject = Objectpivot;
         SettingObjectTransform();
-        rigidBody.isKinematic = true;
     }
 
     void DrawVirtualObject(bool active)
@@ -352,12 +343,17 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
 
     public void GotoCargoZone()
     {
+        rigidBody.isKinematic = true;
         SettingObjectTransform();
         Objectpivot.transform.parent = Cacher.cargoManager.cargoZone.transform.Find("Objects").gameObject.transform;
-        // uld 안에 있었을 경우 CargoZonePositioning 방식 적용
-        if (Cacher.cargoManager.uldObjects.Contains(this.gameObject) || isPreviousCargo == true)
+        // CargoZonePositioning 방식 적용
+        if (isUsingGeneratePos == true)
         {
-            Cacher.cargoManager.CargoZonePositioning(this.gameObject);
+            Objectpivot.transform.localEulerAngles = Vector3.zero;
+            Objectpivot.transform.localPosition = Vector3.zero;
+            Cacher.cargoManager.GeneratePositioning(this.gameObject);
+            startPosition = Objectpivot.transform.localPosition;
+            isUsingGeneratePos = false;
         }
         else
         {
