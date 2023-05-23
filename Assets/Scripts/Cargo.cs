@@ -351,7 +351,6 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         {
             Objectpivot.transform.localEulerAngles = Vector3.zero;
             Objectpivot.transform.localPosition = Vector3.zero;
-            SettingObjectTransform();
             Cacher.cargoManager.GeneratePositioning(this.gameObject);
             startPosition = Objectpivot.transform.localPosition;
             isUsingGeneratePos = false;
