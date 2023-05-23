@@ -88,7 +88,7 @@ public class CargoManager : MonoBehaviour
     public void GeneratePositioning(GameObject addedCargo)
     {
         // X축 초과할 경우 Z축으로 이동
-        if (currentCargoZoneLength_X + addedCargo.GetComponent<MeshCollider>().bounds.size.x > cargoZoneLength_X)
+        if (currentCargoZoneLength_X + addedCargo.GetComponent<Cargo>().originBoundsX > cargoZoneLength_X)
         {
             // CargoZone의 오브젝트중 가장 긴 Z축의 값을 Z축 간격으로 설정
             for (int i = 0; i < cargoZoneObjects.Count; i++)
@@ -101,7 +101,8 @@ public class CargoManager : MonoBehaviour
             axisSpacing_Z += longestAxis_Z;
             currentCargoZoneLength_X = 0;
         }
-        addedCargo.GetComponent<Cargo>().Objectpivot.transform.localPosition = new Vector3(currentCargoZoneLength_X + addedCargo.GetComponent<MeshCollider>().bounds.size.x / 2, addedCargo.GetComponent<MeshCollider>().bounds.size.y / 2, -axisSpacing_Z);
+        Debug.Log(new Vector3(currentCargoZoneLength_X + addedCargo.GetComponent<Cargo>().originBoundsX / 2, addedCargo.GetComponent<Cargo>().originBoundsY / 2, -axisSpacing_Z));
+        addedCargo.GetComponent<Cargo>().Objectpivot.transform.localPosition = new Vector3(currentCargoZoneLength_X + addedCargo.GetComponent<Cargo>().originBoundsX / 2, addedCargo.GetComponent<Cargo>().originBoundsY / 2, -axisSpacing_Z);
         currentCargoZoneLength_X += addedCargo.GetComponent<MeshCollider>().bounds.size.x;
     }
 
