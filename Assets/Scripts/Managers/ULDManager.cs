@@ -7,11 +7,16 @@ public class ULDManager : MonoBehaviour
     public ULD[] ulds;
     public ULD currentULD;
 
-    public float SCA_height = 297.7f;
+    public float SCA_height;
+    public float SCA_bounds_Z;
+    public float ratio;
 
     private void Awake() 
     {
         currentULD.Initialize();
+        SCA_height = 297.7f;
+        SCA_bounds_Z = currentULD.transform.GetChild(2).Find("SCA_Type1_Top").transform.position.y;
+        ratio = SCA_height / SCA_bounds_Z;
     }
 
     public void ResetULD()

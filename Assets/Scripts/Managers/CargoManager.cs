@@ -42,7 +42,10 @@ public class CargoManager : MonoBehaviour
             cargoPrefab.transform.localScale = new Vector3(1, 1, 1);
 
             float cargoWidth = cargoPrefab.GetComponent<CargoInfo>().width;
+            float cargoLength = cargoPrefab.GetComponent<CargoInfo>().length;
+            float cargoHeight = cargoPrefab.GetComponent<CargoInfo>().height;
 
+            Debug.Log(Cacher.uldManager.ratio);
             
         }
     }
