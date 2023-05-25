@@ -15,9 +15,9 @@ public class ULDManager : MonoBehaviour
     {
         currentULD.Initialize();
         SCA_RealHeight = 297.7f;
-        SCA_UnityHeight = currentULD.transform.Find("").GetComponent<BoxCollider>().bounds.size.x; // uld분리 전 원본 높이 측정
+        SCA_UnityHeight = currentULD.transform.Find("SCA_Type1_Full").GetComponent<BoxCollider>().bounds.size.y; // uld분리 전 원본 높이 측정
+        Destroy(currentULD.transform.Find("SCA_Type1_Full").gameObject);
         ratio = SCA_RealHeight / SCA_UnityHeight;
-        ratio = 27f;
     }
 
     public void ResetULD()
