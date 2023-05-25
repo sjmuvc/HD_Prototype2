@@ -32600,6 +32600,9 @@ MonoBehaviour:
   - {fileID: 5769382363572795641, guid: d8b6fe4bff6bcf0499f2ab7ff55bd7f9, type: 3}
   - {fileID: 230733791642354177, guid: b33238f3498183049a150eb82b67debd, type: 3}
   currentULD: {fileID: 867197771}
+  SCA_height: 0
+  SCA_bounds_Z: 0
+  ratio: 0
 --- !u!1 &808989658
 GameObject:
   m_ObjectHideFlags: 0
