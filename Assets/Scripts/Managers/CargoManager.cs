@@ -38,13 +38,14 @@ public class CargoManager : MonoBehaviour
         for (int i = 0; i < cargos.Length; i++)
         {
             Cargo cargoPrefab = Instantiate(cargos[i]);
-            Debug.Log(cargoPrefab.GetComponent<MeshCollider>().bounds.size);
             cargoPrefab.transform.localScale = new Vector3(1, 1, 1);
+            Debug.Log(cargoPrefab.GetComponent<MeshCollider>().bounds.size);
 
-            float cargoWidth = cargoPrefab.GetComponent<CargoInfo>().width;
-            float cargoLength = cargoPrefab.GetComponent<CargoInfo>().length;
-            float cargoHeight = cargoPrefab.GetComponent<CargoInfo>().height;
-            
+            // 모델의 바운즈가 이 값이 되도록 조정해야됨
+            float cargoWidth = cargoPrefab.GetComponent<CargoInfo>().width / Cacher.uldManager.ratio; 
+            float cargoLength = cargoPrefab.GetComponent<CargoInfo>().length / Cacher.uldManager.ratio;
+            float cargoHeight = cargoPrefab.GetComponent<CargoInfo>().height / Cacher.uldManager.ratio;
+
 
         }
     }

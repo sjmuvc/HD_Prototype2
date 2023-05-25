@@ -27,7 +27,7 @@ public class InputManager : MonoBehaviour
             {
                 Cacher.uldManager.currentULD.uld.transform.localEulerAngles = new Vector3(Cacher.uldManager.currentULD.uld.transform.localEulerAngles.x, Cacher.uldManager.currentULD.uld.transform.localEulerAngles.y - 10, Cacher.uldManager.currentULD.uld.transform.localEulerAngles.z);
             }
-
+        //Debug.Log(Cacher.cargoManager.cargoZonePlane.GetComponent<MeshCollider>().bounds.size);
     }
 
     public void InPutRotate(GameObject objectPivot)
