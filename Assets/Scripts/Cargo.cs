@@ -140,7 +140,7 @@ public class Cargo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         Vector3 mousePos = Input.mousePosition;
         Vector3 worldMousePos = Cacher.uiManager.mainCamera.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, cameraToObjectDistance)); // 카메라로부터 거리값
         Cacher.cargoManager.AllFreeze(true);
-        Cacher.inputManager.InPutRotate(Objectpivot);
+        Cacher.inputManager.InputRotate(Objectpivot);
         RayPositioning(worldMousePos);
     }
 

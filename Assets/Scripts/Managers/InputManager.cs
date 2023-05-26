@@ -27,15 +27,11 @@ public class InputManager : MonoBehaviour
             {
                 Cacher.uldManager.currentULD.uld.transform.localEulerAngles = new Vector3(Cacher.uldManager.currentULD.uld.transform.localEulerAngles.x, Cacher.uldManager.currentULD.uld.transform.localEulerAngles.y - 10, Cacher.uldManager.currentULD.uld.transform.localEulerAngles.z);
             }
-        //Debug.Log(Cacher.cargoManager.cargoZonePlane.GetComponent<MeshCollider>().bounds.size);
+
     }
 
-    public void InPutRotate(GameObject objectPivot)
+    public void InputRotate(GameObject objectPivot)
     {
-        Vector3 tmpVector = new Vector3();
-
-        tmpVector = objectPivot.transform.localEulerAngles;
-
         if (Input.GetKeyDown(KeyCode.R))
         {
             objectPivot.transform.Rotate(0, rotateValue, 0, Space.World);
@@ -51,7 +47,6 @@ public class InputManager : MonoBehaviour
             objectPivot.transform.Rotate(0, 0, rotateValue, Space.World);
             ResetSimulation(objectPivot);
         }
-        //objectPivot.transform.localEulerAngles = tmpVector; 
     }
 
     private void ResetSimulation(GameObject objectPivot)
