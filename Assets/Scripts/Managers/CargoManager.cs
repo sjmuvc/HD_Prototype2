@@ -40,7 +40,6 @@ public class CargoManager : MonoBehaviour
         for (int i = 0; i < cargos.Length; i++)
         {
             Cargo cargoPrefab = Instantiate(cargos[i]);
-            //cargoPrefab.transform.localScale = new Vector3(1, 1, 1); // Awake, Start에선 Size를 바꿔도 bounds가 사이즈 바꾸기 전으로 나옴
 
             float cargoWidth = cargoPrefab.GetComponent<CargoInfo>().width / Cacher.uldManager.ratio; 
             float cargoLength = cargoPrefab.GetComponent<CargoInfo>().length / Cacher.uldManager.ratio;
