@@ -17,6 +17,7 @@ public class CargoManager : MonoBehaviour
     float longestAxis_Z;
     float axisSpacing_Z;
     public GameObject abovePlaneObjects;
+    public GameObject sizeAdjustedObjects;
 
     public List<GameObject> cargoZoneObjects = new List<GameObject>();  
     public List<GameObject> uldObjects = new List<GameObject>();
@@ -30,7 +31,8 @@ public class CargoManager : MonoBehaviour
         cargoZonePlane = GameObject.Find("CargoZonePlane");
         cargoZoneLength_X = cargoZonePlane.GetComponent<MeshCollider>().bounds.size.x;
         cargoZoneLength_Z = cargoZonePlane.GetComponent<MeshCollider>().bounds.size.z;
-        abovePlaneObjects = GameObject.Find("AbovePlaneObjects"); 
+        abovePlaneObjects = GameObject.Find("AbovePlaneObjects");
+        sizeAdjustedObjects = GameObject.Find("SizeAdjustedObjects");
     }
 
     public void CargoSizeSetting()
@@ -40,7 +42,6 @@ public class CargoManager : MonoBehaviour
             Cargo cargoPrefab = Instantiate(cargos[i]);
             //cargoPrefab.transform.localScale = new Vector3(1, 1, 1); // Awake, Start에선 Size를 바꿔도 bounds가 사이즈 바꾸기 전으로 나옴
 
-            // 모델의 바운즈가 이 값이 되도록 조정해야됨
             float cargoWidth = cargoPrefab.GetComponent<CargoInfo>().width / Cacher.uldManager.ratio; 
             float cargoLength = cargoPrefab.GetComponent<CargoInfo>().length / Cacher.uldManager.ratio;
             float cargoHeight = cargoPrefab.GetComponent<CargoInfo>().height / Cacher.uldManager.ratio;
@@ -50,7 +51,10 @@ public class CargoManager : MonoBehaviour
             float scaleRatio_Y = cargoHeight / cargoPrefab.GetComponent<MeshCollider>().bounds.size.y;
 
             cargoPrefab.transform.localScale = new Vector3(scaleRatio_X, scaleRatio_Y, scaleRatio_Z);
-            Debug.Log(cargoPrefab.GetComponent<MeshCollider>().bounds.size);
+
+            cargos[i] = cargoPrefab;
+            cargoPrefab.transform.parent = sizeAdjustedObjects.transform;
+            sizeAdjustedObjects.SetActive(false);
         }
     }
 
