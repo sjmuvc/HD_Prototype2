@@ -17,6 +17,7 @@ public class CargoManager : MonoBehaviour
     float longestAxis_Z;
     float axisSpacing_Z;
     public GameObject abovePlaneObjects;
+    public GameObject sizeAdjustedObjects;
 
     public List<GameObject> cargoZoneObjects = new List<GameObject>();  
     public List<GameObject> uldObjects = new List<GameObject>();
@@ -31,6 +32,29 @@ public class CargoManager : MonoBehaviour
         cargoZoneLength_X = cargoZonePlane.GetComponent<MeshCollider>().bounds.size.x;
         cargoZoneLength_Z = cargoZonePlane.GetComponent<MeshCollider>().bounds.size.z;
         abovePlaneObjects = GameObject.Find("AbovePlaneObjects");
+        sizeAdjustedObjects = GameObject.Find("SizeAdjustedObjects");
+    }
+
+    public void CargoSizeSetting()
+    {
+        for (int i = 0; i < cargos.Length; i++)
+        {
+            Cargo cargoPrefab = Instantiate(cargos[i]);
+
+            float cargoWidth = cargoPrefab.GetComponent<CargoInfo>().width / Cacher.uldManager.ratio; 
+            float cargoLength = cargoPrefab.GetComponent<CargoInfo>().length / Cacher.uldManager.ratio;
+            float cargoHeight = cargoPrefab.GetComponent<CargoInfo>().height / Cacher.uldManager.ratio;
+
+            float scaleRatio_X = cargoWidth / cargoPrefab.GetComponent<MeshCollider>().bounds.size.x;
+            float scaleRatio_Z = cargoLength / cargoPrefab.GetComponent<MeshCollider>().bounds.size.z;
+            float scaleRatio_Y = cargoHeight / cargoPrefab.GetComponent<MeshCollider>().bounds.size.y;
+
+            cargoPrefab.transform.localScale = new Vector3(scaleRatio_X, scaleRatio_Y, scaleRatio_Z);
+
+            cargos[i] = cargoPrefab;
+            cargoPrefab.transform.parent = sizeAdjustedObjects.transform;
+            sizeAdjustedObjects.SetActive(false);
+        }
     }
 
     public void GenerateCargo(int cargosQuantity)
@@ -118,7 +142,6 @@ public class CargoManager : MonoBehaviour
     {
         for(int i = 0; i < uldObjects.Count; i++)
         {
-            //uldObjects[i].GetComponent<Cargo>().isUsingGeneratePos = true;
             uldObjects[i].GetComponent<Cargo>().GotoCargoZone();
             Cacher.cargoManager.cargoZoneObjects.Add(uldObjects[i]);  
         }

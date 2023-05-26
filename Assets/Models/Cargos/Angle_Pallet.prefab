@@ -288,7 +288,7 @@ Transform:
   m_GameObject: {fileID: 5369375069622719327}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -1.24, y: 1.11, z: -1.17}
-  m_LocalScale: {x: 0.003, y: 0.003, z: 0.003}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7716293954309362013}
@@ -378,16 +378,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   thisPos: {x: 0, y: 0, z: 0}
+  abovePlaneObject: {fileID: 0}
   objectHeight: 0
-  objectHeightX: 0
-  objectHeightY: 0
-  objectHeightZ: 0
+  originBoundsX: 0
+  originBoundsY: 0
+  originBoundsZ: 0
   Objectpivot: {fileID: 0}
   startPosition: {x: 0, y: 0, z: 0}
   startLocalEulerAngles: {x: 0, y: 0, z: 0}
   isInsideTheWall: 1
   time: 0
-  isPreviousCargo: 0
+  isUsingGeneratePos: 0
 --- !u!114 &3694419471943610915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -404,7 +405,7 @@ MonoBehaviour:
   width: 1
   length: 1
   height: 1
-  volume_water: 0.65
+  volume_water: 1.2
   volume_square: 0.605
   weight: 60
   isStructed: 1
